@@ -1,3 +1,6 @@
+import joblib
+model = joblib.load("phishing_model.pkl")
+vectorizer = joblib.load("vectorizer.pkl")
 import re
 
 sus_words=["verify","account","password","otp","click","urgent","now","alert"]
@@ -156,6 +159,9 @@ def cal_score(parsed_data):
         score=100
     risk=risk_level(score)
 
+    ml_risk = ml_score(parsed_data["text"])
+    score = (score * 0.6) + (ml_risk * 0.4)
+
     return  {"score": score,
              "risk": risk,
              "reasons":list(reasons)}
@@ -188,6 +194,14 @@ def analyze_patterns(all_tokens):
             pattern_score += 20
             pattern_reasons.add("Multiple correlated phishing indicators detected")
     return pattern_score, pattern_reasons
+#--------------Phishing Probability----------------
+def ml_score(text):
+
+    vec = vectorizer.transform([text])
+    prob = model.predict_proba(vec)[0][1]  
+
+    return prob * 100
+
 #----------------testing----------------
 sample = """
 URGENT! Verify your bank account now.
