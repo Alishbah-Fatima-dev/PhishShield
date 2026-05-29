@@ -1,17 +1,41 @@
 import joblib
-model = joblib.load("phishing_model.pkl")
-vectorizer = joblib.load("vectorizer.pkl")
 import re
+import os
+
+from threat_intel import (
+    check_url_virustotal,
+    format_vt_report,
+    normalize_url
+)
+
+TRUSTED_DOMAINS = ["google.com","microsoft.com","github.com","openai.com","paypal.com","amazon.com","apple.com"]
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "phishing_model.pkl")
+vectorizer_path = os.path.join(BASE_DIR, "vectorizer.pkl")
+model = joblib.load(model_path)
+vectorizer = joblib.load(vectorizer_path)
 
 sus_words=["verify","account","password","otp","click","urgent","now","alert"]
+
 sus_dic={ "gen":["verify","login","reward","prize","discount","lucky","now"],
          "pii":["name","address","account","visit","password","click","urgent","alert","warning"],
          "spi":["bank","credit","security","cnic","otp","password","address","process","transaction"]}
+
 trusted_domains = [ "google", "microsoft","github", "paypal","amazon","facebook","apple"]
+
 trusted_email_domains = ["gmail","outlook","yahoo","icloud","edu", "gov"]
+
 phish_patterns=[{"bank", "login", "verify"},{"password", "click", "urgent"},
                 {"account", "security", "alert"},{"otp", "bank", "transaction"}]
-#-----------------Cleaning extracted data----------------
+
+threat_categories = {
+    "credential_harvesting": ["password", "login", "verify", "account", "otp"],
+    "financial_scam": ["bank", "credit", "transaction", "payment"],
+    "urgency_social_engineering": [ "urgent", "alert", "warning", "immediately", "now"],
+    "suspicious_link": ["click", "secure", "update", "visit"]}
+
+#--------------Cleaning extracted data----------------
 def clean_items(list1):
     emp_list=[]
     for r in list1 :
@@ -35,6 +59,15 @@ def tokenize_input(data):
     data = data.lower()
     tokens = re.split(r"[^\w]+", data)
     return tokens
+#----------Handling input types--------------------
+def detect_input_type(parsed_data):
+    if parsed_data["emails"] and parsed_data["urls"]:
+        return "mixed"
+    elif parsed_data["emails"]:
+        return "email"
+    elif parsed_data["urls"]:
+        return "url"
+    return "text"
 #------------Assigning Risk level--------
 def risk_level(score):
     if score >= 70:
@@ -76,7 +109,6 @@ def analyze_email(email):
         email_score += 5
         email_reasons.add("Unknown or untrusted email domain detected")
     return email_score, email_reasons
-
 #--------------main detection engine------------
 feature_weights={ }
 def cal_score(parsed_data):
@@ -154,17 +186,35 @@ def cal_score(parsed_data):
     extra_score, extra_reasons = analyze_patterns(all_tokens)
     score += extra_score
     reasons.update(extra_reasons)
+    vt_score, vt_reasons = analyze_threat_intel(parsed_data.get("urls", []))
+    score += vt_score
+    vt_report = vt_reasons
 #---------------Score Cap--------------
     if score>100:
         score=100
     risk=risk_level(score)
-
+#---------------aggregating risk score--------
     ml_risk = ml_score(parsed_data["text"])
     score = (score * 0.6) + (ml_risk * 0.4)
 
-    return  {"score": score,
+    category = detect_threat_category(all_tokens)
+# ---------- trusted domain override ----------
+    if is_trusted_domain(parsed_data.get("urls", [])):
+        score -= 25
+        if score < 0:
+            score = 0
+    if score<=15:
+        category = "trusted_service"
+        reasons.add( "Trusted domain reputation detected." )
+    input_type = detect_input_type(parsed_data)
+    ai_explanation = generate_ai_explanation(category,score,reasons,input_type)
+   
+    return  {"score": round(score,2),
              "risk": risk,
-             "reasons":list(reasons)}
+             "category": category,
+             "ai_explanation": ai_explanation,
+             "reasons":list(reasons),
+             "vt_report": vt_report}
 #---------------URL analysis--------------
 def analyze_url(url):
     url_score = 0
@@ -194,25 +244,95 @@ def analyze_patterns(all_tokens):
             pattern_score += 20
             pattern_reasons.add("Multiple correlated phishing indicators detected")
     return pattern_score, pattern_reasons
+#-------------checking trusted domains----------------
+def is_trusted_domain(urls):
+    for url in urls:
+        for domain in TRUSTED_DOMAINS:
+            if domain in url.lower():
+                return True
+    return False
+#-----------------AI Categorization-------------
+def detect_threat_category(all_tokens):
+    category_scores = {}
+    for category, keywords in threat_categories.items():
+        score = 0
+        for word in keywords:
+            if word in all_tokens:
+                score += 1
+        category_scores[category] = score
+    best_category = max(category_scores, key=category_scores.get)
+    if category_scores[best_category] == 0:
+        return "unknown"
+    return best_category
+#---------------AI generated explanation-------------
+def generate_ai_explanation(category, score, reasons, input_type):
+    if input_type == "url":
+        base = "This URL was analyzed using domain reputation, threat intelligence sources, and heuristic signals."
+    elif input_type == "email":
+        base = "This email was analyzed for phishing indicators including sender reputation, content patterns, and social engineering tactics."
+    elif input_type == "mixed":
+        base = "This input contains both email and URL indicators analyzed for phishing behavior and external reputation signals."
+    else:
+        base = "This content was analyzed for general phishing and security risks."
+    explanations = {
+        "credential_harvesting":"This message appears to imitate a legitimate service and attempts to steal user credentials or authentication data.",
+      
+        "financial_scam":"The content contains financial and banking-related indicators commonly associated with phishing scams.",
+
+        "urgency_social_engineering":"The message uses urgency and pressure tactics to manipulate the recipient into taking immediate action.",
+
+        "suspicious_link":"The message contains suspicious links or redirection tactics often used in phishing campaigns.",
+
+        "unknown":"Suspicious indicators were detected, but the threat pattern could not be confidently classified.",
+         
+        "brand_impersonation":"This message references a trusted service but contains suspicious indicators inconsistent with legitimate communication patterns.",
+        
+        "trusted_service":"Legitimate service indicators were detected. While some security-related language exists, the domain reputation appears trusted.",
+    }
+    explanation = explanations.get(category)
+    if any("VirusTotal" in r for r in reasons):
+        explanation += (" External threat intelligence sources also reported malicious or suspicious activity related to the detected URLs.")
+    explanation = explanations.get(category, "")  
+    return base + " " + explanation
+#-----------------Normalize URL--------------------
+def normalize_url(url):
+    if not url.startswith("http://") and not url.startswith("https://"):
+        url = "https://" + url
+    return url 
+#-----------------Threat intelligence Analysis---------------
+def analyze_threat_intel(urls):
+    vt_score = 0
+    vt_reasons = []
+    for url in urls:
+        vt_result = check_url_virustotal(url)
+        malicious = vt_result.get("malicious", 0)
+        suspicious = vt_result.get("suspicious", 0)
+        if malicious >= 8:
+            vt_score += 25
+        elif malicious >= 3 or suspicious >= 3:
+            vt_score += 15
+    report = format_vt_report(vt_result)
+    if report:
+        vt_reasons.append(report)
+    return vt_score, vt_reasons
 #--------------Phishing Probability----------------
 def ml_score(text):
-
     vec = vectorizer.transform([text])
     prob = model.predict_proba(vec)[0][1]  
-
     return prob * 100
-
 #----------------testing----------------
 sample = """
 URGENT! Verify your bank account now.
 Click here:
-www.secure-bank-login.xyz at admin1@gmail.com
+https://www.google.com at admin1@gmail.com
 """
 
 parsed = parser_input(sample)
 final_result = cal_score(parsed)
 print("\nRisk Score: ",final_result.get("score"))
 print("Risk Level: ",final_result["risk"])
-print("\nReasons:")
-for reason in final_result["reasons"]:
-    print("-", reason)
+print("\nThreat Category: ",final_result["category"])
+print("\nThreat Intelligence Analysis:")
+for line in final_result["vt_report"]:
+    print("-", line)
+print("\nAI Analysis:",final_result["ai_explanation"])
