@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PhishShield Security Console</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0b1220;
+    color: white;
+    margin: 0;
+    padding: 30px;
+}
+
+.container {
+    width: 70%;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+input {
+    width: 75%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: white;
+    cursor: pointer;
+}
+
+.card {
+    background: #111a2e;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.high { background: red; }
+.medium { background: orange; }
+.low { background: green; }
+
+.bar {
+    width: 100%;
+    background: #1f2a44;
+    border-radius: 10px;
+    height: 20px;
+    margin-top: 10px;
+}
+
+.fill {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.result-section {
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🛡️ PhishShield Security Console</h1>
+
+<input id="textInput" placeholder="Enter URL or message">
+<button onclick="analyze()">Analyze</button>
+<div id="result"></div>
+
+</div>
+
+<script>
+async function analyze() {
+    try {
+        const text = document.getElementById("textInput").value;
+
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ text })
+        });
+
+        const data = await response.json();
+        console.log("API RESPONSE:", data);
+
+        if (data.error) {
+            document.getElementById("result").innerHTML =
+                `<div class="card" style="color:red;">
+                    ERROR: ${data.error}
+                </div>`;
+            return;
+        }
+
+        document.getElementById("result").innerHTML = `
+            <div class="card">
+                <p><b>Risk Score:</b> ${data.score ?? "N/A"}</p>
+                <p><b>Risk Level:</b> ${data.risk ?? "N/A"}</p>
+                <p><b>Category:</b> ${data.category ?? "N/A"}</p>
+                <p><b>AI Explanation:</b> ${data.ai_explanation ?? "N/A"}</p>
+            </div>
+        `;
+
+    }catch (err) {
+    console.error(err);
+
+    document.getElementById("result").innerHTML =
+        `<div class="card" style="color:red;">
+            Frontend Error:<br>${err}
+        </div>`;
+    }
+}
+</script>
+
+<!-- <script>
+async function analyze() {
+    const text = document.getElementById("textInput").value;
+
+    const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text })
+    });
+}
+    const data = await response.json();
+console.log("API RESPONSE:", data);
+
+// 🚨 CHECK FOR ERROR FIRST
+if (data.error) {
+    document.getElementById("result").innerHTML =
+        `<div class="card" style="color:red;">
+            ERROR: ${data.error}
+        </div>`;
+    return;
+}
+
+// safe rendering
+document.getElementById("result").innerHTML = `
+    <div class="card">
+        <p><b>Risk Score:</b> ${data.score ?? "N/A"}</p>
+        <p><b>Risk Level:</b> ${data.risk ?? "N/A"}</p>
+        <p><b>Category:</b> ${data.category ?? "N/A"}</p>
+        <p><b>AI Explanation:</b> ${data.ai_explanation ?? "N/A"}</p>
+    </div>
+`;
+ -->
+    <!-- // const data = await response.json();
+
+    // let color = "low";
+    // if (data.risk === "HIGH") color = "high";
+    // else if (data.risk === "MEDIUM") color = "medium";
+
+    // let percent = parseFloat(data.score);
+
+    // document.getElementById("result").innerHTML = `
+    //     <div class="card">
+
+    //         <h2>Risk Overview</h2>
+
+    //         <span class="badge ${color}">
+    //             ${data.risk}
+    //         </span>
+
+    //         <p>Score: ${data.score}</p>
+
+    //         <div class="bar">
+    //             <div class="fill ${color}" style="width:${percent}%"></div>
+    //         </div>
+
+    //         <div class="result-section">
+    //             <h3>Category</h3>
+    //             <p>${data.category}</p>
+    //         </div>
+
+    //         <div class="result-section">
+    //             <h3>AI Explanation</h3>
+    //             <p>${data.ai_explanation}</p>
+    //         </div>
+
+    //         <div class="result-section">
+    //             <h3>Threat Intelligence</h3>
+    //             <pre>${JSON.stringify(data.threat_intelligence, null, 2)}</pre>
+        //     </div>
+
+        // </div>
+    `;
+} -->
+  <!-- </script> -->
+
+  </body>
+ </html>
