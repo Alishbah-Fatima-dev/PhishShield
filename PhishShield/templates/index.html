@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PhishShield Security Console</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0b1220;
+    color: #cbd5e1;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    width: 50%;
+    margin: auto;
+}
+
+.label {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 5px;
+}
+
+.score {
+    margin-top: 8px;
+    font-size: 18px;
+}
+
+.title {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-bottom: 8px;
+}
+
+.text {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.value {
+    font-size: 14px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #e9e9f0;
+}
+
+.section h3 {
+    margin-top: 0;
+    color: #93c5fd;
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #e2e8f0;
+    border-bottom: 1px solid #1f2a44;
+    padding-bottom: 10px;
+}
+
+input {
+    width: 75%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #222a81;
+    outline: none;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4c655a;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #329f5f;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    color: rgb(23, 16, 16);
+}
+
+.high { background: #7f1d1d; color: #fecaca; }
+.medium { background: #78350f; color: #fde68a; }
+.low { background: #14532d; color: #bbf7d0; }
+
+.bar {
+    width: 100%;
+    background: #e5e7eb;
+    border-radius: 10px;
+    height: 20px;
+    margin-top: 10px;
+}
+
+.fill {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.result-section {
+    margin-top: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    background: #111a2e;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.section {
+    background: #0f172a;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.panel {
+    background: #0b1220;
+    border: 1px solid #1f2a44;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.topbar {
+    background: #0b1220;
+    border-bottom: 1px solid #1f2a44;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+.topbar h2 {
+    margin: 0;
+    color: #e5e7eb;
+}
+
+.topbar p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.soc-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.log-box {
+    background: #0b1220;
+    border: 1px solid #1f2a44;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.log-item {
+    padding: 6px;
+    border-bottom: 1px solid #1f2a44;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.empty-state {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #1f2a44;
+    background: #0b1220;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #e2e8f0;
+}
+
+.header p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: #94a3b8;
+}
+.input-bar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+input {
+    width: 60%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #1f2a44;
+    background: #0b1220;
+    color: #e2e8f0;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+.empty {
+    color: #94a3b8;
+    font-style: italic;
+    padding: 10px;
+}
+</style>
+</head>
+
+<body>
+    <div class="topbar">
+    <h2>🛡 PhishShield SOC Console</h2>
+    <p>Real-time phishing & threat intelligence analysis</p>
+</div>
+
+<div class="container">
+<div class="header">
+    <h1>PhishShield Security Console</h1>
+    <p>Threat detection and phishing analysis system</p>
+</div>
+<div class="input-bar">
+    <input id="textInput" placeholder="Enter URL, email or message">
+    <button onclick="analyze()">Analyze</button>
+</div>
+<div id="result"></div>
+<script>
+async function analyze() {
+    try {
+        const text = document.getElementById("textInput").value;
+
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            document.getElementById("result").innerHTML =
+                `<div class="card error">
+                    ${data.error}
+                </div>`;
+            return;
+        }
+
+        let color = "low";
+        if (data.risk === "HIGH") color = "high";
+        else if (data.risk === "MEDIUM") color = "medium";
+
+        const percent = Number(data.score || 0);
+
+        const vtSummary = (
+            data.threat_intelligence &&
+            data.threat_intelligence.summary &&
+            data.threat_intelligence.summary.length > 0
+        )
+            ? data.threat_intelligence.summary
+                .map(i => `<div class="log-item">${i}</div>`)
+                .join("")
+            : `<div class="empty">No threat intelligence data available</div>`;
+
+        const indicators = (
+            data.detection_indicators &&
+            data.detection_indicators.length > 0
+        )
+            ? data.detection_indicators
+                .map(i => `<div class="log-item">${i}</div>`)
+                .join("")
+            : `<div class="empty">No detection indicators</div>`;
+
+        document.getElementById("result").innerHTML = `
+            <div class="card">
+
+                <h2>Risk Overview</h2>
+
+                <div class="dashboard">
+
+                    <div class="panel">
+                        <div class="label">Risk</div>
+                        <div class="badge ${color}">${data.risk}</div>
+                        <div class="score">${data.score}</div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">Category</div>
+                        <div class="value">${data.category}</div>
+                    </div>
+
+                </div>
+
+                <div class="grid">
+
+                    <div class="section">
+                        <div class="title">AI Analysis</div>
+                        <div class="text">${data.ai_explanation}</div>
+                    </div>
+
+                    <div class="section">
+                        <div class="title">Threat Intelligence</div>
+                        <div class="log-box">${vtSummary}</div>
+                    </div>
+
+                    <div class="section">
+                        <div class="title">Detection Indicators</div>
+                        <div class="log-box">${indicators}</div>
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+
+    } catch (err) {
+        document.getElementById("result").innerHTML =
+            `<div class="card error">${err}</div>`;
+    }
+}
+</script>
+
+
+  </body>
+ </html>

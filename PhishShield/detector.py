@@ -114,8 +114,8 @@ feature_weights={ }
 def cal_score(parsed_data):
     score=0
     vt_reasons = []
-    rule_reasons = []
-    email_reasons = []
+    rule_reasons = set()
+    email_reasons = set()
     counted_tokens=set()
     all_tokens = set()
 #-------------------text analysis-----------------
@@ -126,13 +126,13 @@ def cal_score(parsed_data):
             continue
         if token in sus_dic.get("spi"):
             score+=15
-            rule_reasons.append("Sensitive financial/security terms detected")
+            rule_reasons.add("Sensitive financial/security terms detected")
         elif token in sus_dic.get("pii"):
             score+=7
-            rule_reasons.append("Credential targeting detected")
+            rule_reasons.add("Credential targeting detected")
         elif token in sus_dic.get("gen"):
             score+=3
-            rule_reasons.append("Urgency/manipulation detected")
+            rule_reasons.add("Urgency/manipulation detected")
         counted_tokens.add(token)
         all_tokens.add(token)
 #----------------URL analysis---------------------
@@ -144,27 +144,27 @@ def cal_score(parsed_data):
                 continue
             if token in sus_dic.get("spi"):
                 score+=15
-                rule_reasons.append("Sensitive financial/security terms detected")
+                rule_reasons.add("Sensitive financial/security terms detected")
             elif token in sus_dic.get("pii"):
                 score+=7
-                rule_reasons.append("Credential targeting detected")
+                rule_reasons.add("Credential targeting detected")
             elif token in sus_dic.get("gen"):
                 score+=3
-                rule_reasons.append("Urgency/manipulation detected")
+                rule_reasons.add("Urgency/manipulation detected")
             counted_tokens.add(token)
             all_tokens.add(token)
         extra_score, extra_reasons = analyze_url(url)
         score += extra_score
-        rule_reasons.extend(extra_reasons)
+        rule_reasons.update(extra_reasons)
 #-------------------email analysis---------------------
     for email in parsed_data.get("emails", []):
         username, domain = email.split("@")
         if domain not in ["gmail.com", "yahoo.com", "outlook.com","microsoft.com"]:
             score += 15
-            email_reasons.append("Untrusted Domain Detected")
+            email_reasons.add("Untrusted Domain Detected")
         if any(char.isdigit() for char in username):
             score += 5
-            email_reasons.append("Unusual numeric pattern in Email")
+            email_reasons.add("Unusual numeric pattern in Email")
         email_tokens = tokenize_input(email)
         for token in email_tokens:
             token= token.strip().lower()
@@ -172,22 +172,22 @@ def cal_score(parsed_data):
                 continue
             if token in sus_dic.get("spi"):
                 score += 15
-                email_reasons.append("Sensitive financial/security terms detected")
+                email_reasons.add("Sensitive financial/security terms detected")
             elif token in sus_dic.get("pii"):
                 score += 7
-                email_reasons.append("Credential targeting detected")
+                email_reasons.add("Credential targeting detected")
             elif token in sus_dic.get("gen"):
                 score += 3
-                email_reasons.append("Urgency/manipulation detected")
+                email_reasons.add("Urgency/manipulation detected")
             counted_tokens.add(token)
             all_tokens.add(token)
         extra_score, extra_reasons = analyze_email(email)
         score += extra_score
-        email_reasons.extend(extra_reasons)
+        email_reasons.update(extra_reasons)
 #---------------Pattern Correlation-------------
     extra_score, extra_reasons = analyze_patterns(all_tokens)
     score += extra_score
-    rule_reasons.extend(extra_reasons)
+    rule_reasons.update(extra_reasons)
     vt_data = analyze_threat_intel(parsed_data.get("urls", []))
     vt_score = vt_data["score"]
     vt_reasons = vt_data["summary"]
@@ -207,12 +207,12 @@ def cal_score(parsed_data):
             score = 0
     if score<=15:
         category = "trusted_service"
-        rule_reasons.append( "Trusted domain reputation detected." )
+        rule_reasons.add( "Trusted domain reputation detected." )
 
     risk=risk_level(score)
 
     input_type = detect_input_type(parsed_data)
-    all_reasons = rule_reasons + email_reasons + vt_reasons
+    all_reasons = rule_reasons.union(email_reasons).union(vt_reasons)
     ai_explanation = generate_ai_explanation(category,score,all_reasons,input_type)
     score = round(score, 2)
 
@@ -225,8 +225,8 @@ def cal_score(parsed_data):
         "summary": vt_reasons,
         "score": vt_score},
 
-    "detection_indicators": rule_reasons,
-    "email_indicators": email_reasons,
+    "detection_indicators":list(rule_reasons),
+    "email_indicators": list(email_reasons),
 
     "ai_explanation": ai_explanation}
 #---------------URL analysis--------------
