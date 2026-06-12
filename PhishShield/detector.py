@@ -342,20 +342,3 @@ def ml_score(text):
     vec = vectorizer.transform([text])
     prob = model.predict_proba(vec)[0][1]  
     return prob * 100
-#----------------testing----------------
-# sample = """
-# URGENT! Verify your bank account now.
-# Click here:
-# https://www.google.com at admin1@gmail.com
-# """
-
-# parsed = parser_input(sample)
-# final_result = cal_score(parsed)
-# print("\nRisk Score: ",final_result.get("score"))
-# print("Risk Level: ",final_result["risk"])
-# print("\nThreat Category: ",final_result["category"])
-# print("\nThreat Intelligence Analysis:")
-# vt = final_result["threat_intelligence"]
-# for item in vt["summary"]:
-#     print("-", item)
-# print("\nAI Analysis:",final_result["ai_explanation"])

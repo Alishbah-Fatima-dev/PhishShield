@@ -1,69 +1,119 @@
-# PhishShield
-PhishShield is an AI-assisted phishing detection and threat analysis system designed to identify suspicious emails, URLs, and phishing-related content using a hybrid cybersecurity approach.
+# PhishShield Security Console
 
-The system combines:
-* Machine Learning based phishing detection
-* Rule-based heuristic analysis
-* Threat intelligence integration using VirusTotal
-* AI-generated threat explanations
-* URL and email reputation analysis
+## Overview
 
-# Features
-* Phishing probability scoring using Machine Learning
-* Detection of credential harvesting attempts
-* Threat categorization system
-* VirusTotal API integration
-* Email and URL parsing
-* Heuristic phishing pattern detection
-* AI-generated security explanations
-* Risk scoring and severity classification
+PhishShield is a web-based phishing detection and threat analysis platform designed to identify potentially malicious URLs, emails, and messages.
 
-# Technologies Used
+The system combines machine learning classification, threat intelligence analysis, and security-focused reporting to help users evaluate phishing risks through an interactive dashboard.
+
+## Features
+
+* Machine Learning Based Phishing Detection
+* Threat Scoring and Risk Assessment
+* Detection Indicator Analysis
+* Threat Intelligence Integration
+* Security Explanation Engine
+* Interactive Security Operations Center (SOC) Style Dashboard
+* Real-Time Analysis Interface
+
+## Technology Stack
+
+### Backend
+
 * Python
 * Flask
-* Scikit-learn
-* Joblib
-* VirusTotal API
-* Regular Expressions (Regex)
+* Scikit-Learn
 
-# Current Detection Capabilities
-PhishShield can currently analyze:
-* Suspicious URLs
-* Email addresses
-* Credential phishing attempts
-* Urgency and manipulation tactics
-* Financial scam indicators
-* Domain reputation signals
+### Frontend
 
-# Project Architecture
-Input
-→ Parsing Engine
-→ Rule-Based Analysis
-→ Machine Learning Detection
-→ Threat Intelligence Analysis
-→ AI Explanation Layer
-→ Final Risk Assessment
+* HTML
+* CSS
+* JavaScript
 
-# Example Output
+### Data Processing
 
-Risk Score: 44.26%
-Risk Level: HIGH
-Threat Category: credential_harvesting
+* Pandas
+* NumPy
 
-Threat Intelligence Analysis:
+### Threat Intelligence
 
-* Out of 92 security vendors, 0 flagged it as malicious, 0 marked it suspicious, and 63 considered it safe.
+* External reputation and intelligence lookups
 
-AI Analysis:
-This message appears to imitate a legitimate service and attempts to steal user credentials or authentication data.
+## Project Structure
 
-# Future Improvements
-* Modern frontend dashboard
-* Real-time scanning animation
-* Interactive threat visualization
-* Multi-API threat intelligence integration
-* Advanced NLP-based phishing analysis
-* Database logging system
+PhishShield/
+│
+├── app.py
+├── detector.py
+├── ml_model.py
+├── threat_intel.py
+├── requirements.txt
+├── README.md
+├── phishing_model.pkl
+├── vectorizer.pkl
+├── templates/
+   └── index.html
 
-# Disclaimer
-This project is developed for educational and research purposes only.
+## API Integration
+
+This project uses the VirusTotal API for threat intelligence and reputation analysis.
+
+To use VirusTotal features:
+
+1. Create a VirusTotal account.
+2. Generate an API key.
+3. Add the key to a .env file:
+
+VT_API_KEY=your_api_key_here
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+cd phishshield-security-console
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application:
+
+```bash
+python app.py
+```
+
+Open:
+
+```text
+http://127.0.0.1:5000
+```
+## Usage
+
+1. Enter a URL, email, or message.
+2. Start analysis.
+3. Review:
+
+   * Threat Score
+   * Risk Status
+   * Threat Category
+   * Detection Indicators
+   * Threat Intelligence Results
+   * Security Analysis
+
+## Future Improvements
+
+* Domain WHOIS Analysis
+* Email Header Inspection
+* Real-Time Threat Feed Integration
+* Multi-Model Detection Pipeline
+* Historical Threat Tracking
+* Advanced SOC Monitoring Features
+
+## Educational Purpose
+
+This project was developed to explore practical applications of machine learning and cybersecurity concepts in phishing detection and threat analysis.

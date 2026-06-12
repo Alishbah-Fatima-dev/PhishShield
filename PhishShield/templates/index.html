@@ -6,211 +6,71 @@
 
 <style>
 body {
-    font-family: Arial, sans-serif;
+    font-family: Aptos,sans-serif;
     background: #0b1220;
-    color: #cbd5e1;
-    margin: 0;
+    color: #e5e7eb;
+    margin: 3;
     padding: 0;
 }
 .container {
-    width: 50%;
+    width: 80%;
+    max-width: 1500px;
     margin: auto;
 }
-
-.label {
-    font-size: 12px;
-    opacity: 0.7;
-    margin-bottom: 5px;
-}
-
-.score {
-    margin-top: 8px;
-    font-size: 18px;
-}
-
-.title {
-    font-size: 13px;
-    opacity: 0.8;
-    margin-bottom: 8px;
-}
-
-.text {
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.value {
-    font-size: 14px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #e9e9f0;
-}
-
-.section h3 {
-    margin-top: 0;
-    color: #93c5fd;
-}
-
-.card h2 {
-    margin-top: 0;
-    color: #e2e8f0;
-    border-bottom: 1px solid #1f2a44;
-    padding-bottom: 10px;
-}
-
-input {
-    width: 75%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #222a81;
-    outline: none;
-}
-
-button {
-    padding: 12px 18px;
-    border: none;
-    border-radius: 8px;
-    background: #4c655a;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #329f5f;
-}
-
-.badge {
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    display: inline-block;
-    color: rgb(23, 16, 16);
-}
-
-.high { background: #7f1d1d; color: #fecaca; }
-.medium { background: #78350f; color: #fde68a; }
-.low { background: #14532d; color: #bbf7d0; }
-
-.bar {
-    width: 100%;
-    background: #e5e7eb;
-    border-radius: 10px;
-    height: 20px;
-    margin-top: 10px;
-}
-
-.fill {
-    height: 100%;
-    border-radius: 10px;
-}
-
-.result-section {
-    margin-top: 20px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.card {
+.topbar {
     background: #111a2e;
+    border-bottom: 1px solid #23314f;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center; 
+    display: flex;
+    align-items: center;
+    gap: 6px;
+} 
+.topbar{
+    background:#111a2e;
+    border-bottom:1px solid #23314f;
+    padding:15px 20px;
+    margin-bottom:20px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.topbar-text{
+    display:flex;
+    flex-direction:column;
+}
+.topbar h2 {
+    margin: 0;
+    color: #e5e7eb;
+}
+.topbar p {
+    margin: 5px 0 0;
+    color: #e5e7eb;
+    font-size: 13px;
+}
+.card {
+    background: #111827;
     padding: 20px;
     margin-top: 20px;
     border-radius: 12px;
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
-
-.section {
-    background: #0f172a;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-.dashboard {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 16px;
-    margin-top: 20px;
-}
-
-.panel {
-    background: #0b1220;
-    border: 1px solid #1f2a44;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.topbar {
-    background: #0b1220;
-    border-bottom: 1px solid #1f2a44;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-}
-
-.topbar h2 {
-    margin: 0;
+.card h2 {
+    margin-top: 0;
     color: #e5e7eb;
+    border-bottom: 1px solid #23314f;
+    padding-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
 }
-
-.topbar p {
-    margin: 5px 0 0;
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-.soc-dashboard {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.log-box {
-    background: #0b1220;
-    border: 1px solid #1f2a44;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.log-item {
-    padding: 6px;
-    border-bottom: 1px solid #1f2a44;
-    font-size: 13px;
-    color: #cbd5e1;
-}
-
-.log-item:last-child {
-    border-bottom: none;
-}
-
-.empty-state {
-    color: #94a3b8;
-    font-style: italic;
-}
-
-.header {
-    padding: 20px;
-    text-align: center;
-    border-bottom: 1px solid #1f2a44;
-    background: #0b1220;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 22px;
-    letter-spacing: 1px;
-    color: #e2e8f0;
-}
-
-.header p {
-    margin: 5px 0 0;
-    font-size: 13px;
-    color: #94a3b8;
+.card h3{
+    font-size:16px;
+    font-weight:600;
+    color:#e5e7eb;
 }
 .input-bar {
     display: flex;
@@ -219,46 +79,236 @@ button:hover {
     margin-top: 20px;
     padding: 10px;
 }
-
 input {
     width: 60%;
     padding: 12px;
     border-radius: 6px;
-    border: 1px solid #1f2a44;
+    border: 1px solid #23314f;
+    background: #111a2e;
+    color: #e5e7eb;
+}
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+
+    background:linear-gradient(
+        135deg,
+        #3b82f6,
+        #2563eb
+    );
+
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 12px rgba(37,99,235,.35);
+
+    transition:.25s ease;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.45);
+}
+
+button:active{
+    transform:translateY(0);
+}
+.gauge-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+.gauge {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--c) calc(var(--p) * 1%),
+        #1f2a44 0
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 0 10px rgba(0,0,0,0.4),
+        0 0 25px var(--c),
+        0 0 60px rgba(59,130,246,0.25);
+
+    transition: 0.5s ease;
+    animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+.gauge-inner {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #111a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-value {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.gauge-label {
+    font-size: 12px;
+    color: #94a3b8;
+}
+.signal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.signal {
     background: #0b1220;
-    color: #e2e8f0;
+    border: 1px solid #23314f;
+    padding: 12px;
+    border-radius: 8px;
 }
 
-button {
-    padding: 12px 18px;
-    border: none;
-    border-radius: 6px;
-    background: #2563eb;
-    color: white;
-    cursor: pointer;
+.sig-title {
+    font-size: 11px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-button:hover {
-    background: #1d4ed8;
+.sig-value {
+     font-size: 16px;
+    font-weight: 700;
+    margin-top: 6px;
+    font-weight: bold;
+    color: #e5e7eb;
+}
+.mini-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.mini-box {
+    background: #0b1220;
+    padding: 10px;
+    border: 1px solid #23314f;
+    border-radius: 8px;
+    text-align: center;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+    border :1px solid #23314f;
+}
+.section {
+    background: #0f172a;
+    padding: 15px;
+    border-radius: 10px;
+}
+.section h3{
+    color:#e5e7eb;
+    font-size:14px;
+    margin-bottom:12px;
+}
+.ai-analysis{
+    margin-top:20px;
+    background:#0f172a;
+    padding:24px;
+    border-radius:10px;
+    line-height:1.9;
+    font-size:15px;
+}
+.ai-analysis h3{
+    margin-top:0;
+    margin-bottom:12px;
+
+    color:#dbeafe;
+
+    font-size:16px;
+}
+.log-box {
+    background: #0b1220;
+    border: 1px solid #23314f;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.log-item {
+    padding: 6px;
+    border-bottom: 1px solid #23314f;
+    font-size: 13px;
+    color: #e5e7eb;
 }
 .empty {
-    color: #94a3b8;
+    color: #e5e7eb;
     font-style: italic;
     padding: 10px;
 }
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #23314f;
+    border-top: 4px solid #21b2f4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseGlow {
+    0% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+    50% {
+        filter: brightness(1.2);
+        transform: scale(1.02);
+    }
+    100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+}
+.log-item:last-child {
+    border-bottom: none;
+}
+.card {
+    animation: fadeIn 0.4s ease;
+}
 </style>
+
 </head>
-
 <body>
-    <div class="topbar">
-    <h2>🛡 PhishShield SOC Console</h2>
-    <p>Real-time phishing & threat intelligence analysis</p>
-</div>
+<div class="topbar">
 
+    <div class="topbar-text">
+        <h2>🛡️PhishShield SOC Console</h2>
+        <p>Real-time phishing detection.</p>
+    </div>
+</div>
 <div class="container">
-<div class="header">
-    <h1>PhishShield Security Console</h1>
-    <p>Threat detection and phishing analysis system</p>
+    <div class="card">
+    <h3><b>Threat Detection Engine</b></h3>
+    <p>
+        Analyze URLs, emails, and messages using AI-powered phishing
+        detection and threat intelligence analysis.
+    </p>
 </div>
 <div class="input-bar">
     <input id="textInput" placeholder="Enter URL, email or message">
@@ -266,9 +316,37 @@ button:hover {
 </div>
 <div id="result"></div>
 <script>
+function getRiskState(score) { 
+    if (score > 80) 
+        return "CRITICAL";
+    if (score > 60) 
+        return "HIGH"; 
+    if (score > 30) 
+        return "MODERATE";
+    return "LOW"; }
+
+function loadingUI() {
+    return `
+    <div class="card">
+        <div class="loader"></div>
+
+        <h3 style="text-align:center;color:#dbeafe;">
+            Running Security Analysis
+        </h3>
+
+        <p style="text-align:center;color:#94a3b8;">
+           <i> Checking threat indicators, phishing patterns,
+            and intelligence feeds...</i>
+        </p>
+
+    </div>`;
+}
+
 async function analyze() {
     try {
         const text = document.getElementById("textInput").value;
+
+        document.getElementById("result").innerHTML = loadingUI();
 
         const response = await fetch("http://127.0.0.1:5000/predict", {
             method: "POST",
@@ -279,87 +357,143 @@ async function analyze() {
         const data = await response.json();
 
         if (data.error) {
-            document.getElementById("result").innerHTML =
-                `<div class="card error">
-                    ${data.error}
-                </div>`;
+            document.getElementById("result").innerHTML = `
+            <div class="card">
+                <h3 style="color:#f87171;">System Alert</h3>
+                <details>
+                    <summary>Technical details</summary>
+                    <pre>${data.error}</pre>
+                </details>
+            </div>`;
             return;
         }
 
-        let color = "low";
-        if (data.risk === "HIGH") color = "high";
-        else if (data.risk === "MEDIUM") color = "medium";
+        const score = Math.max(0, Math.min(100, Number(data.score || 0)));
 
-        const percent = Number(data.score || 0);
+        let color = "#22c55e";
+        if (data.risk === "HIGH") color = "#ef4444";
+        else if (data.risk === "MEDIUM") color = "#f59e0b";
 
-        const vtSummary = (
-            data.threat_intelligence &&
-            data.threat_intelligence.summary &&
-            data.threat_intelligence.summary.length > 0
-        )
-            ? data.threat_intelligence.summary
-                .map(i => `<div class="log-item">${i}</div>`)
-                .join("")
-            : `<div class="empty">No threat intelligence data available</div>`;
-
-        const indicators = (
-            data.detection_indicators &&
-            data.detection_indicators.length > 0
-        )
-            ? data.detection_indicators
-                .map(i => `<div class="log-item">${i}</div>`)
-                .join("")
-            : `<div class="empty">No detection indicators</div>`;
+        const ti = data.threat_intelligence?.summary || [];
+        const indicators = data.detection_indicators || [];
+        const riskState = getRiskState(score);
 
         document.getElementById("result").innerHTML = `
-            <div class="card">
 
-                <h2>Risk Overview</h2>
+        <div class="card">
 
-                <div class="dashboard">
+            <h2>Security Analysis Report</h2>
 
-                    <div class="panel">
-                        <div class="label">Risk</div>
-                        <div class="badge ${color}">${data.risk}</div>
-                        <div class="score">${data.score}</div>
+            <!-- GAUGE -->
+            <div class="gauge-wrapper">
+                <div class="gauge" style="--p:${score}; --c:${color}">
+                    <div class="gauge-inner">
+                        <div class="gauge-value">${score}</div>
+                        <div class="gauge-label">Threat Score</div>
                     </div>
+                </div>
+            </div>
+            <div class="section">
+    <h3>Attack Signal Matrix</h3>
 
-                    <div class="panel">
-                        <div class="label">Category</div>
-                        <div class="value">${data.category}</div>
+    <div class="signal-grid">
+
+        <div class="signal">
+            <div class="sig-title">Credential Risk</div>
+        <div>
+        ${data.category === "credential_harvesting" ? "HIGH" : "LOW"}</div>
+        </div>
+
+        <div class="signal">
+            <div class="sig-title">Link Risk</div>
+            <div class="sig-value">${data.detection_indicators.length > 2 ? "HIGH" : "MEDIUM"}</div>
+        </div>
+
+        <div class="signal">
+            <div class="sig-title">Message Behavioral</div>
+            <div class="sig-value">${data.score > 50 ? "SUSPICIOUS" : "NORMAL"}</div>
+        </div>
+
+        <div class="signal">
+            <div class="sig-title">Threat Severity</div>
+            <div class="sig-value">${data.risk}</div>
+        </div>
+
+    </div>
+</div>
+            </div>
+
+            <!-- MINI SUMMARY -->
+            <div class="mini-grid">
+
+                <div class="mini-box">
+                    <h4>Risk Status</h4>
+                    <div style="color:${color}; font-weight:bold;">
+                        ${data.risk}
                     </div>
-
                 </div>
 
-                <div class="grid">
-
-                    <div class="section">
-                        <div class="title">AI Analysis</div>
-                        <div class="text">${data.ai_explanation}</div>
+                <div class="mini-box">
+                <h4>Threat Category</h4>
+                <div>${data.category.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</div>
                     </div>
+                
+                    <div class="mini-box">
+                <h4>Analysis Time</h4>
+                <div>${new Date().toLocaleTimeString()}</div>
+</div>
+            </div>
 
-                    <div class="section">
-                        <div class="title">Threat Intelligence</div>
-                        <div class="log-box">${vtSummary}</div>
+            <!-- MAIN CONTENT -->
+            <div class="grid">
+
+                <div class="section">
+                    <h3>Threat Intelligence</h3>
+                    <div class="log-box">
+                        ${
+                            ti.length
+                            ? ti.map(i => `<div class="log-item">${i}</div>`).join("")
+                            : `<div class="empty">No malicious reputation records were found.</div>`
+                        }
                     </div>
-
-                    <div class="section">
-                        <div class="title">Detection Indicators</div>
-                        <div class="log-box">${indicators}</div>
-                    </div>
-
                 </div>
+
+                <div class="section">
+                    <h3>Detection Indicators</h3>
+                    <div class="log-box">
+                        ${
+                            indicators.length
+                            ? indicators.map(i => `<div class="log-item">${i}</div>`).join("")
+                            : `<div class="empty">No phishing indicators identified.</div>`
+                        }
+                    </div>
+                </div>
+            </div>
+                   
+            <div class="ai-analysis">
+                    <h3>AI Security Analysis</h3>
+                    <p style="line-height:1.6;">
+                        ${data.ai_explanation}
+                    </p>
+                   </div>
+
 
             </div>
-        `;
 
-    } catch (err) {
-        document.getElementById("result").innerHTML =
-            `<div class="card error">${err}</div>`;
+        </div>
+        `;
+    }
+    catch (err) {
+        document.getElementById("result").innerHTML = `
+        <div class="card">
+            <h3 style="color:#f87171;">System Failure</h3>
+            <details>
+                <summary>Error details</summary>
+                <pre>${err}</pre>
+            </details>
+        </div>`;
     }
 }
 </script>
-
-
-  </body>
+</body>
  </html>
