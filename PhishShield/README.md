@@ -54,6 +54,34 @@ PhishShield/
 ├── templates/
    └── index.html
 
+## Screenshots
+
+### Analysis Workflow
+
+Loading screen displayed while phishing indicators, threat intelligence feeds, and security signals are being processed.
+
+![Loading Screen](screenshots/dashboard.png)
+
+### High-Risk Phishing Detection
+
+Dashboard overview showing threat score, attack signal matrix, and risk assessment.
+
+![High Risk Overview](screenshots/high-risk-overview.png)
+
+Detailed analysis showing threat intelligence, detection indicators, and security assessment.
+
+![High Risk Details](screenshots/high-risk-details.png)
+
+### Benign / Low-Risk Analysis
+
+Dashboard overview for a legitimate input with low threat score and reduced risk indicators.
+
+![Low Risk Overview](screenshots/low-risk-overview.png)
+
+Detailed analysis showing intelligence results and explanation output.
+
+![Low Risk Details](screenshots/low-risk-details.png)
+
 ## API Integration
 
 This project uses the VirusTotal API for threat intelligence and reputation analysis.
